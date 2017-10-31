@@ -12,9 +12,9 @@ void drawGame(vector<vector<char>> oriVector, int colNum)
 
 	cout << '\n';
 
-	for (int row = 0; row < oriVector.size(); row++)
+	for (unsigned int row = 0; row < oriVector.size(); row++)
 	{
-		for (int col = 0; col < oriVector[row].size(); col++)
+		for (unsigned int col = 0; col < oriVector[row].size(); col++)
 		{
 			cout << oriVector[row][col] << " ";
 		}
@@ -123,18 +123,21 @@ bool checkRightDiagonal(vector<vector<char>> grid, bool isFirstPlayer, int setRo
 
 	for (row = 0; row <= setRow - checkmate; row++)
 	{
-		for (col = checkmate - 1; col <= setCol; col++)
+		for (col = checkmate -1; col < setCol; col++)
 		{
 			int flag = checkmate;
+
 			while (flag)
 			{
 				flag--;
+	
 				if (grid[row + flag][col - flag] != token)
 				{
 					break;
 				}
 				if (flag == 0)
 				{
+					cout << "Yoyo" << endl;
 					return true;
 				}
 			}
@@ -180,7 +183,7 @@ vector<vector<char>> subtractPiece(vector<vector<char>> grid, int selectedNum)
 
 bool isTokenRemovable(vector<vector<char>> grid, bool isFirstPlayer)
 {
-	for (int col = 0; col < grid[0].size(); ++col)
+	for (unsigned int col = 0; col < grid[0].size(); ++col)
 	{
 		if (grid[grid.size() - 1][col] == (isFirstPlayer ? 'O' : 'X'))
 		{
@@ -194,9 +197,9 @@ bool isTied(vector<vector<char>> grid)
 {
 	int flag = 0;
 
-	for (int row = 0; row < grid.size(); row++)
+	for (unsigned int row = 0; row < grid.size(); row++)
 	{
-		for (int col = 0; col < grid[row].size(); col++)
+		for (unsigned int col = 0; col < grid[row].size(); col++)
 		{
 			if (grid[row][col] != '#')
 			{
@@ -245,9 +248,7 @@ int main()
 		cin >> removeMode;
 	};
 
-
 	vector <vector<char>> theGrid(static_cast<unsigned long>(cusRow), vector<char>(static_cast<unsigned long>(cusColumn), '#'));
-
 
 	drawGame(theGrid, cusColumn);
 
@@ -347,9 +348,9 @@ int main()
 			{
 				isFirstPlayer = false;
 				cout << "Game restarted.\n";
-				for (int row = 0; row < theGrid.size(); row++)
+				for (unsigned int row = 0; row < theGrid.size(); row++)
 				{
-					for (int col = 0; col<theGrid[row].size(); col++)
+					for (unsigned int col = 0; col<theGrid[row].size(); col++)
 					{
 						theGrid[row][col] = '#';
 					}
@@ -361,6 +362,42 @@ int main()
 				break;
 			}
 		}
+
+		if (hasWon(theGrid, !isFirstPlayer, cusRow, cusColumn, winCondition))
+		{
+			cout << "Player " << to_string(isFirstPlayer ? 1 : 2) << " won!!!\n";
+
+			string playAgain;
+
+			while (!cin.fail() && playAgain != "y" && playAgain != "n")
+			{
+				cout << "Do you want to play again?(y?n)\n";
+				cin >> playAgain;
+			};
+
+			cin.clear();
+			cin.ignore(1000, '\n');
+
+			if (playAgain == "y")
+			{
+				isFirstPlayer = false;
+				cout << "Game restarted.\n";
+				for (unsigned int row = 0; row < theGrid.size(); row++)
+				{
+					for (unsigned int col = 0; col<theGrid[row].size(); col++)
+					{
+						theGrid[row][col] = '#';
+					}
+				}
+				drawGame(theGrid, cusColumn);
+			}
+			if (playAgain == "n")
+			{
+				break;
+			}
+		}
+
+
 
 		if (isTied(theGrid))
 		{
@@ -379,9 +416,9 @@ int main()
 			{
 				isFirstPlayer = false;
 				cout << "Game restarted.\n";
-				for (int row = 0; row < theGrid.size(); row++)
+				for (unsigned int row = 0; row < theGrid.size(); row++)
 				{
-					for (int col = 0; col<theGrid[row].size(); col++)
+					for (unsigned int col = 0; col<theGrid[row].size(); col++)
 					{
 						theGrid[row][col] = '#';
 					}
